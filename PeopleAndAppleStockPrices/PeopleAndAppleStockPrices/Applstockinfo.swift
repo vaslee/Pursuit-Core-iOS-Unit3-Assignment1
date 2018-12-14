@@ -23,22 +23,44 @@ struct Applstockinfo: Codable {
     let changeOverTime: Double
 }
 
-//static var episodeBySeason: [Applstockinfo] = [Applstockinfo.init(date: <#T##String#>, open: <#T##Double#>, high: <#T##Double#>, low: <#T##Double#>, close: <#T##Double#>, volume: <#T##Int#>, unadjustedVolume: <#T##Int#>, change: <#T##Double#>, changePercent: <#T##Double#>, vwap: <#T##Double#>, label: <#T##String#>, changeOverTime: <#T##Double#>) Applstockinfo.allEpisodes.filter{$0.season == 2}, Applstockinfo.allEpisodes.filter{$0.season == 3}, Applstockinfo.allEpisodes.filter{$0.season == 4}, Applstockinfo.allEpisodes.filter{$0.season == 5}, Applstockinfo.allEpisodes.filter{$0.season == 6}, Applstockinfo.allEpisodes.filter{$0.season == 7}]
+extension String {
+    // input String date e.g 2018-12-19 - from Meetup JSON
+    // output e.g Decemeber 19, 2018
+    static func formattedDate(str: String) -> String {
+        var formattedString = str
+        // DateFormatter()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // create a Date()
+        if let date = dateFormatter.date(from: formattedString) {
+            dateFormatter.dateFormat = "MMMM-yyyy"
+            formattedString = dateFormatter.string(from: date)
+        } else {
+            print("formattedDate: invalid date")
+        }
+        return formattedString
+    }
+}
+
+
+
+
+
+
+
+
 
 
 //let stockPrice1 = Applstockinfo(date: "2016-10-09", String(open: 145.0, close: 145.50))
-//let stockPrice2 = Applstockinfo(date: "2016-10-10", open: 145.0, close: 145.50)
-//let stockPrice3 = Applstockinfo(date: "2016-11-12", open: 145.0, close: 145.50)
-//let stockPrice4 = Applstockinfo(date: "2016-11-13", open: 145.0, close: 145.50)
-//let stockPrice5 = Applstockinfo(date: "2016-12-20", open: 145.0, close: 145.50)
-//let stockPrice6 = Applstockinfo(date: "2016-12-21", open: 145.0, close: 145.50)
-//let stockPrice7 = Applstockinfo(date: "2017-01-04", open: 145.0, close: 145.50)
-//let stockPrice8 = Applstockinfo(date: "2017-01-05", open: 145.0, close: 145.50)
+//let stockPrice2 = Applstockinfo(date: "2016-10-10", String(open: 145.0, close: 145.50))
+//let stockPrice3 = Applstockinfo(date: "2016-11-12", String(open: 145.0, close: 145.50))
+//let stockPrice4 = Applstockinfo(date: "2016-11-13", String(open: 145.0, close: 145.50))
+//let stockPrice5 = Applstockinfo(date: "2016-12-20", String(open: 145.0, close: 145.50))
+//let stockPrice6 = Applstockinfo(date: "2016-12-21", String(open: 145.0, close: 145.50))
+//let stockPrice7 = Applstockinfo(date: "2017-01-04", String(open: 145.0, close: 145.50))
+//let stockPrice8 = Applstockinfo(date: "2017-01-05", String(open: 145.0, close: 145.50))
 //
-//func getDateMonth(dateString: String) -> (month: String, year: String) {
-//    let components = dateString.components(separatedBy: "-")
-//    return (components[1], components[0])
-//}
 
 
 //// 1. get all stocks parsed from the JSON file
@@ -76,3 +98,4 @@ struct Applstockinfo: Codable {
 //
 //
 //print(stockPrices.count)
+//}

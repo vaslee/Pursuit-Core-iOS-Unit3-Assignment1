@@ -61,21 +61,11 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = userTableView.dequeueReusableCell(withIdentifier: "userInfoCell", for: indexPath)
         let userinfoToSet = userInfo[indexPath.row]
+       //cell.imageView?.image = UIImage(named: userinfoToSet.picture.thumbnail)
         cell.textLabel?.text = userinfoToSet.name.first.capitalized.sorted() + " " + userinfoToSet.name.last.capitalized
         cell.detailTextLabel?.text = userinfoToSet.location.state.capitalized
         
-        
-        if let url = URL.init(String: userinfoToSet.picture?.medium) {
-            do {
-                let data = try Data.init(contentsOf: url)
-                if let image = UIImage.init(data: data) {
-                    cell.imageView?.image = image
-                }
-            }catch {
-                print("Image error is \(error)")
-            }
-        }
-        return cell
+                return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

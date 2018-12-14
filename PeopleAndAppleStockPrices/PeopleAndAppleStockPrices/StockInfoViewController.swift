@@ -11,16 +11,37 @@ import UIKit
 class StockInfoViewController: UIViewController {
 
     
-    @IBOutlet weak var priceTagLabel: UILabel!
     @IBOutlet weak var stockTableView: UITableView!
     var stockInfo = [Applstockinfo]()
+    var stockByDate = [[Applstockinfo]]()
+    
+//    for i in stockInfo {
+//    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "StockInfo"
         runData()
         stockTableView.dataSource = self
+
+        for year in 2016...2018 {
+            for month in 1...12 {
+                var newMonth = ""
+                if month < 10 {
+                    newMonth = "0\(month.description)"
+                } else {
+                    newMonth = "\(month.description)"
+                }
+                let filteredArr = stockInfo.filter{getDateMonth(dateString: $0.date).month == newMonth && getDateMonth(dateString: $0.date).year  == year.description}
+                if !filteredArr.isEmpty {
+                    stockByDate.append(filteredArr)
+                }
+        }
+        }
+        print(stockByDate)
         
-        title = "StockInfo"
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -31,6 +52,13 @@ class StockInfoViewController: UIViewController {
         DetailStockInfoViewController.stockInformation = stocks
     }
     
+ 
+    
+    func getDateMonth(dateString: String) -> (month: String, year: String) {
+            let components = dateString.components(separatedBy: "-")
+            return (components[1], components[0])
+        }
+
     
     
     func runData() {
@@ -51,39 +79,38 @@ class StockInfoViewController: UIViewController {
 
 
 extension StockInfoViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return stockByDate.count
+    }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "November-2016:Avrage:"
-        case 1:
-            return "Januay-2017:Avrage:"
-        case 2:
-            return "February-2017:Avrage:"
-        case 3:
-            return "March-2017:Avrage:"
-        case 4:
-            return "April-2017:Avrage:"
-        case 5:
-            return "May-2017:Avrage:"
-        case 6:
-            return "June-2017:Avrage:"
-        default:
-            return "Unknown"
+        guard let dateString = stockByDate[section].first?.date else {
+            return "No Date"
         }
+        
+        var totalAverage = 0.0
+        for i in 0..<stockByDate[section].count {
+            totalAverage += stockByDate[section][i].open
+        }
+        
+        return "\(String.formattedDate(str: dateString)) Average:\(String(format: "%.2f", totalAverage/Double(stockByDate[section].count)))"
+    
+
+      
     }
     
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
            let cell = stockTableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath)
-        let stockInfoToSet = stockInfo[indexPath.row]
+        let stockInfoToSet = stockByDate[indexPath.section][indexPath.row]
         cell.textLabel?.text = stockInfoToSet.date
         cell.detailTextLabel?.text = "$" + String(format: "%.2f", stockInfoToSet.open)
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stockInfo.count
+        return stockByDate[section].count
     }
     
     

@@ -27,6 +27,8 @@ class StockDetailViewController: UIViewController {
         dataLabel.text = stockInformation.date
         openLabel.text = "$" + String(format: "%.2f", stockInformation.open)
         closeLabel.text = "$" + String(format: "%.2f", stockInformation.close)
+        
+        
         if stockInformation.close > stockInformation.open {
         image.image = UIImage(named: "thumbsUp")
             view.backgroundColor = .green
